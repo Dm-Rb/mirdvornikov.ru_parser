@@ -106,9 +106,15 @@ class Spider:
         cars_parent_block = soup.find('div', 'app_links')
         if cars_parent_block:
             relation_cars_url = [i.attrs['href'] for i in cars_parent_block.find_all('a')]
-            relation_cars_content = [cls.get_relation_car(i) for i in relation_cars_url]
-            if relation_cars_content:
-                pass # !!!!!!!!!!!!!!!!!!!
+            if relation_cars_url:
+                relation_cars_content = []
+                for url in relation_cars_url:
+                    try:
+                        relation_cars_content.append(cls.get_relation_car(url))
+                    except Exception:
+                        continue
+                if relation_cars_content:
+                    result["models"] = relation_cars_content
 
         #  IMAGES
         images_parent_block = soup.find('div', class_='sitem-pics')
