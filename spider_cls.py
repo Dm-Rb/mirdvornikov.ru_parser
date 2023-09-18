@@ -27,14 +27,17 @@ class Spider:
 
     @staticmethod
     def pages_quantity(soup):
+
         parent_tag = soup.find('div', class_='nav-pages')
-        a_list = parent_tag.find_all('a')
-        last_link = a_list[len(a_list) - 1].attrs['href']
-        sub_string = re.findall(r'PAGEN_\d=\d{0,}', last_link)[0]
-        pages_quantity = re.split(r'=', sub_string)[1]
+        if parent_tag:
+            a_list = parent_tag.find_all('a')
+            last_link = a_list[len(a_list) - 1].attrs['href']
+            sub_string = re.findall(r'PAGEN_\d=\d{0,}', last_link)[0]
+            pages_quantity = re.split(r'=', sub_string)[1]
 
-        return int(pages_quantity)
-
+            return int(pages_quantity)
+        else:
+            return None
     @classmethod
     def get_products_links(cls, category_url):
         # get links from first page
@@ -45,10 +48,16 @@ class Spider:
         # get quantity pages
         pages_quantity = cls.pages_quantity(soup)
         # iteration for pages
-        for page_num in range(2, pages_quantity + 1):
-            page = f'?PAGEN_1={page_num}'
-            url = category_url + page
-            html = cls.get_html(url=cls.host + url, func_name='get_products_links')
+        if pages_quantity:
+            for page_num in range(2, pages_quantity + 1):
+                page = f'?PAGEN_1={page_num}'
+                url = category_url + page
+                html = cls.get_html(url=cls.host + url, func_name='get_products_links')
+                soup = BeautifulSoup(html, "html.parser")
+                div_list = soup.find_all('div', class_='sitem-head')
+                links.extend([a.find('a').attrs['href'] for a in div_list])
+        else:
+            html = cls.get_html(url=cls.host + category_url, func_name='get_products_links')
             soup = BeautifulSoup(html, "html.parser")
             div_list = soup.find_all('div', class_='sitem-head')
             links.extend([a.find('a').attrs['href'] for a in div_list])
