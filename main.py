@@ -1,6 +1,8 @@
 from spider_cls import Spider
 from tracking_cls import Tracking
-from save_to_json import save
+from save_to_json import save, exception_pages
+
+
 
 if __name__ == "__main__":
 
@@ -18,7 +20,10 @@ if __name__ == "__main__":
             Tracking.write_products(products_url)
 
         for product_url in products_url:
-            product_content = Spider.get_product_content(product_url)
-            save(product_content)
+            try:
+                product_content = Spider.get_product_content(product_url)
+                save(product_content)
+            except Exception:
+                exception_pages(product_url)
             Tracking.del_first_item_products()
         Tracking.del_first_item_categories()

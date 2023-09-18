@@ -107,12 +107,7 @@ class Spider:
         if cars_parent_block:
             relation_cars_url = [i.attrs['href'] for i in cars_parent_block.find_all('a')]
             if relation_cars_url:
-                relation_cars_content = []
-                for url in relation_cars_url:
-                    try:
-                        relation_cars_content.append(cls.get_relation_car(url))
-                    except Exception:
-                        continue
+                relation_cars_content = [cls.get_relation_car(url) for url in relation_cars_url]
                 if relation_cars_content:
                     result["models"] = relation_cars_content
 

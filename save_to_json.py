@@ -35,11 +35,18 @@ def save(content_item):
             with open(os.path.join(SAVEFOLDER, current_file), 'w', encoding='utf-8') as f:
                 f.write(json.dumps(structure, ensure_ascii=False, indent=2))
 
-
-
-
-
-
+def exception_pages(url):
+    file = 'exception_pages.json'
+    if not os.path.isdir(file):
+        data = [url]
+        with open(file, 'w', encoding='utf-8') as f:
+            f.write(json.dumps(data, ensure_ascii=False))
+    else:
+        with open(file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        data.append(url)
+        with open(file, 'w', encoding='utf-8') as f:
+            f.write(json.dumps(data, ensure_ascii=False))
 
 
 
