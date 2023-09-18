@@ -38,6 +38,7 @@ class Spider:
             return int(pages_quantity)
         else:
             return None
+
     @classmethod
     def get_products_links(cls, category_url):
         # get links from first page
