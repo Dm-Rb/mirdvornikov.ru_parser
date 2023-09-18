@@ -56,12 +56,6 @@ class Spider:
                 soup = BeautifulSoup(html, "html.parser")
                 div_list = soup.find_all('div', class_='sitem-head')
                 links.extend([a.find('a').attrs['href'] for a in div_list])
-        else:
-            html = cls.get_html(url=cls.host + category_url, func_name='get_products_links')
-            soup = BeautifulSoup(html, "html.parser")
-            div_list = soup.find_all('div', class_='sitem-head')
-            links.extend([a.find('a').attrs['href'] for a in div_list])
-
         return links
 
     @staticmethod
